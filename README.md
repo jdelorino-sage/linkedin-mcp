@@ -5,7 +5,7 @@
 
 # LinkedIn Profile Analyzer MCP
 
-A powerful LinkedIn profile analyzer MCP (Machine Control Protocol) server that interacts with LinkedIn's API to fetch, analyze, and manage LinkedIn posts data. This MCP is specifically designed to work with Claude AI.
+A powerful LinkedIn profile analyzer MCP (Model Context Protocol) server that interacts with LinkedIn's API to fetch, analyze, and manage LinkedIn posts data. This MCP is specifically designed to work with Claude AI.
 
 
 ## Features
