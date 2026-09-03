@@ -111,4 +111,10 @@ if __name__ == "__main__":
         mcp.settings.streamable_http_path = "/mcp"
         app = mcp.streamable_http_app()      # official mcp SDK v1
 
-    uvicorn.run(RequireKey(app), host="127.0.0.1", port=8000)
+    # Railway (and most PaaS) inject the port to bind on via PORT.
+    # Falls back to 8000 so local runs are unchanged.
+    uvicorn.run(
+        RequireKey(app),
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+    )

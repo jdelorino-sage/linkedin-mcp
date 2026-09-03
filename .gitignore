@@ -1,0 +1,4 @@
+.venv/
+.env
+linkedin_posts.json
+__pycache__/
