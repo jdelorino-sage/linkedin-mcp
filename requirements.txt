@@ -1,2 +1,4 @@
+mcp>=1.9,<2
 requests
 python-dotenv
+uvicorn
