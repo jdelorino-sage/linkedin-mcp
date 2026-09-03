@@ -101,6 +101,5 @@ def get_posts_by_date(start_date: str, end_date: str) -> dict:
     filtered_posts = [post for post in posts if start_dt <= datetime.strptime(post["Posted Date"], "%Y-%m-%d") <= end_dt]
     return {"start_date": start_date, "end_date": end_date, "total_results": len(filtered_posts), "posts": filtered_posts[:5], "has_more": len(filtered_posts) > 5}
 
-# 2. Update the execution block at the very bottom to run with SSE transport
 if __name__ == "__main__":
-    mcp.run(transport="sse", host="0.0.0.0", port=8000)
+    mcp.run()
