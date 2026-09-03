@@ -103,7 +103,11 @@ def get_posts_by_date(start_date: str, end_date: str) -> dict:
 
 def main():
     # Use SSE transport so Copilot Studio can connect via a web URL
-    mcp.run(transport="sse", host="0.0.0.0", port=8000)
-
 if __name__ == "__main__":
-    main()
+    # if `pip show fastmcp` found the standalone fastmcp package (2.x):
+    mcp.run(transport="http", host="127.0.0.1", port=8000, path="/mcp")
+
+    # if you only have the official `mcp` SDK, use this instead:
+    # mcp.settings.host = "127.0.0.1"
+    # mcp.settings.port = 8000
+    # mcp.run(transport="streamable-http")
