@@ -41,8 +41,15 @@ def fetch_and_save_linkedin_posts(username: str) -> str:
         raise Exception(f"Error fetching posts: {response.status_code} - {response.text}")
     
     data = response.json()
+    raw_posts = data.get("data")
+    if raw_posts is None or not isinstance(raw_posts, list):
+        raise Exception(
+            "Unexpected RapidAPI response shape. Top level keys: "
+            f"{list(data.keys())}. message={data.get('message')!r}"
+        )
+
     posts = []
-    for post in data.get('data', []):
+    for post in raw_posts:
         posts.append({
             "Post URL": post.get('postUrl', ''), 
             "Text": post.get('text', ''), 
@@ -58,10 +65,19 @@ def fetch_and_save_linkedin_posts(username: str) -> str:
             "Main Image": post.get('image', [{}])[0].get('url', '') if post.get('image') else '', 
             "All Images": ", ".join([img.get('url', '') for img in post.get('image', [])]),
         })
-        
+
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(posts, f, indent=4)
-    return f"Data saved in {DATA_FILE}"
+
+    if not posts:
+        return (
+            f"Saved 0 posts for '{username}'. RapidAPI answered 200 but returned an "
+            f"empty data list. message={data.get('message')!r}. Check the username is "
+            "the LinkedIn vanity slug (the part after /in/), and that the RapidAPI "
+            "subscription is active and within quota."
+        )
+
+    return f"Saved {len(posts)} posts for '{username}' to {DATA_FILE}."
 
 @mcp.tool()
 def get_saved_posts(start: int = 0, limit: int = 5) -> dict:
