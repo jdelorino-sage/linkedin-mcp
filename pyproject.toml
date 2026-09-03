@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "linkedin-mcp"
+version = "0.1.0"
+description = "A LinkedIn profile analyzer MCP server for Claude and Copilot"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp",
+    "requests",
+    "python-dotenv"
+]
+
+[project.scripts]
+# This allows the environment to run your server via a CLI command
+linkedin-mcp = "main:main"
