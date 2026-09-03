@@ -1,4 +1,5 @@
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 import requests
 import json
 import os
@@ -8,8 +9,21 @@ from datetime import datetime
 # Load environment variables
 load_dotenv() 
 
-# 1. Initialize the MCP server with the SSE-compatible setup
-mcp = FastMCP("LinkedIn Profile Analyzer")
+# The SDK's DNS rebinding protection allowlists localhost only when it is
+# given no settings, which 421s every request once the server sits behind a
+# real hostname. Allowlist the public host via MCP_ALLOWED_HOSTS instead of
+# turning the protection off. Comma separated, no scheme, e.g.
+#   MCP_ALLOWED_HOSTS=myapp.up.railway.app
+_LOCAL_HOSTS = ["127.0.0.1:*", "localhost:*", "[::1]:*"]
+_extra_hosts = [h.strip() for h in os.getenv("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()]
+
+_security = TransportSecuritySettings(
+    enable_dns_rebinding_protection=True,
+    allowed_hosts=_LOCAL_HOSTS + _extra_hosts,
+    allowed_origins=_LOCAL_HOSTS + _extra_hosts,
+)
+
+mcp = FastMCP("LinkedIn Profile Analyzer", transport_security=_security)
 DATA_FILE = "linkedin_posts.json"
 rapidapi_key = os.getenv("RAPIDAPI_KEY")
 
