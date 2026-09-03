@@ -101,9 +101,6 @@ def get_posts_by_date(start_date: str, end_date: str) -> dict:
     filtered_posts = [post for post in posts if start_dt <= datetime.strptime(post["Posted Date"], "%Y-%m-%d") <= end_dt]
     return {"start_date": start_date, "end_date": end_date, "total_results": len(filtered_posts), "posts": filtered_posts[:5], "has_more": len(filtered_posts) > 5}
 
-def main():
-    # Use SSE transport so Copilot Studio can connect via a web URL
-
 if __name__ == "__main__":
     import uvicorn
     from auth import RequireKey
@@ -112,6 +109,6 @@ if __name__ == "__main__":
         app = mcp.http_app(path="/mcp")      # standalone fastmcp 2.x
     except AttributeError:
         mcp.settings.streamable_http_path = "/mcp"
-        app = mcp.streamable_http_app()      # official mcp SDK
+        app = mcp.streamable_http_app()      # official mcp SDK v1
 
     uvicorn.run(RequireKey(app), host="127.0.0.1", port=8000)
