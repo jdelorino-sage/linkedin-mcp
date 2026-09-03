@@ -103,6 +103,7 @@ def get_posts_by_date(start_date: str, end_date: str) -> dict:
 
 def main():
     # Use SSE transport so Copilot Studio can connect via a web URL
+
 if __name__ == "__main__":
     import uvicorn
     from auth import RequireKey
